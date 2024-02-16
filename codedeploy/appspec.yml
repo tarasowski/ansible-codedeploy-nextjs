@@ -6,7 +6,11 @@ files:
   - source: /app
     destination: /var/www/myapp
 hooks:
+  BeforeInstall:
+    - location: codedeploy/install_node.sh
+      timeout: 100
+      runas: root
   ApplicationStart:
     - location: codedeploy/deploy.sh
-      timeout: 300
-      runas: ubuntu
+      timeout: 100
+      runas: root
