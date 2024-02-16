@@ -1,0 +1,3 @@
+# vars/main.yml
+---
+aws_region: "us-east-1"

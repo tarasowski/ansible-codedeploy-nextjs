@@ -1,0 +1,44 @@
+---
+- name: Install CodeDeploy Agent on EC2 Ubuntu
+  hosts: servers
+  vars_files:
+    - vars/main.yml
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Ensure ruby is installed
+      apt:
+        name: ruby
+        state: present
+        update_cache: yes
+
+    - name: Ensure python3-pip is installed
+      apt:
+        name: python3-pip
+        state: present
+        update_cache: yes
+
+    - name: Install AWS CLI
+      pip:
+        name: awscli
+
+    - name: Download CodeDeploy Agent
+      get_url:
+        url: https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
+        dest: /tmp/install_codedeploy
+        mode: '0755'
+
+    - name: Install CodeDeploy Agent
+      command: /tmp/install_codedeploy auto
+      environment:
+        AWS_REGION: "{{ aws_region }}"
+
+    - name: Ensure CodeDeploy Agent is running
+      service:
+        name: codedeploy-agent
+        state: started
+        enabled: yes
+...

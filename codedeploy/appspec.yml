@@ -1,0 +1,12 @@
+# create a role for ec2 instance, attach a role 👇
+# policy name AmazonEC2RoleforAWSCodeDeploy
+version: 0.0
+os: linux
+files:
+  - source: /app
+    destination: /var/www/myapp
+hooks:
+  ApplicationStart:
+    - location: codedeploy/deploy.sh
+      timeout: 300
+      runas: ubuntu
